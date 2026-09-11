@@ -1,0 +1,11 @@
+# Dependencias de Node (se reinstalan con "npm install")
+node_modules/
+
+# Artefactos generados por Cypress al ejecutar
+**/cypress/videos/
+**/cypress/screenshots/
+**/cypress/downloads/
+
+# Archivos del sistema operativo
+Thumbs.db
+.DS_Store
