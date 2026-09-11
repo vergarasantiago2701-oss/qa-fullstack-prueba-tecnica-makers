@@ -36,7 +36,7 @@ Los tres casos exigidos por el enunciado corresponden a CP-01, CP-02 y CP-03/CP-
 ## Organización del código
 
 | Carpeta | Responsabilidad |
-| --- | --- | --- |
+| --- | --- |
 | `cypress/e2e/` | Las pruebas: qué se valida |
 | `cypress/pages/` | Page Objects: cómo se interactúa con cada página |
 | `cypress/fixtures/` | Datos de prueba: credenciales y mensajes esperados |
