@@ -1,0 +1,196 @@
+{
+  "info": {
+    "_postman_id": "07d6afa9-ec89-4de3-b6b6-e27727982464",
+    "name": "Prueba",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49060688",
+    "_collection_link": "https://go.postman.co/collection/49060688-07d6afa9-ec89-4de3-b6b6-e27727982464?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Creacion de usuario",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\r\npm.test(\"Status code es 201\", function () {\r\n    pm.expect(pm.response.code).to.eql(201);\r\n});\r\n\r\nconst jsonData = pm.response.json();\r\n\r\n// Guardar el id en la variable de colección \"id_usuario\"\r\npm.collectionVariables.set(\"id_usuario\", jsonData.id);\r\n\r\n// Opcional: verificar que se guardó correctamente\r\nconsole.log(\"id_usuario guardado:\", pm.collectionVariables.get(\"id_usuario\"));"
+            ]
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Guardar los datos enviados en el POST para comparar después\r\nconst requestBody = JSON.parse(pm.request.body.raw);\r\npm.collectionVariables.set(\"nombre_enviado\", requestBody.name);\r\npm.collectionVariables.set(\"trabajo_enviado\", requestBody.job);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"Test User\", \"job\": \"Automation Engineer\"}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://6aa4bd771397053d42bb04d8.mockapi.io/api/users",
+          "protocol": "https",
+          "host": [
+            "6aa4bd771397053d42bb04d8",
+            "mockapi",
+            "io"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Usuario",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Validar que el status code sea 200\r\npm.test(\"Status code es 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst jsonData = pm.response.json();\r\nconst nombreEnviado = pm.collectionVariables.get(\"nombre_enviado\");\r\nconst trabajoEnviado = pm.collectionVariables.get(\"trabajo_enviado\");\r\n\r\npm.test(\"El nombre coincide con el enviado en el POST\", function () {\r\n    pm.expect(jsonData.name).to.eql(nombreEnviado);\r\n});\r\n\r\npm.test(\"El trabajo coincide con el enviado en el POST\", function () {\r\n    pm.expect(jsonData.job).to.eql(trabajoEnviado);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://6aa4bd771397053d42bb04d8.mockapi.io/api/users/{{id_usuario}}",
+          "protocol": "https",
+          "host": [
+            "6aa4bd771397053d42bb04d8",
+            "mockapi",
+            "io"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{id_usuario}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Editar usuario",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Guardar el nombre actualizado\r\nconst requestBody = JSON.parse(pm.request.body.raw);\r\npm.collectionVariables.set(\"nombre_actualizado\", requestBody.name);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code es 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst jsonData = pm.response.json();\r\nconst nombreActualizado = pm.collectionVariables.get(\"nombre_actualizado\");\r\n\r\npm.test(\"La respuesta refleja el nombre actualizado\", function () {\r\n    pm.expect(jsonData.name).to.eql(nombreActualizado);\r\n});\r\n\r\npm.test(\"El id del usuario no cambia tras la actualización\", function () {\r\n    pm.expect(jsonData.id).to.eql(pm.collectionVariables.get(\"id_usuario\"));\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\": \"User\", \"job\": \"Automation Engineer\"}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://6aa4bd771397053d42bb04d8.mockapi.io/api/users/{{id_usuario}}",
+          "protocol": "https",
+          "host": [
+            "6aa4bd771397053d42bb04d8",
+            "mockapi",
+            "io"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{id_usuario}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener Usuario editado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Validar que el status code sea 200\r\npm.test(\"Status code es 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst jsonData = pm.response.json();\r\nconst nombreActualizado = pm.collectionVariables.get(\"nombre_actualizado\");\r\n\r\npm.test(\"El nombre coincide con el enviado en el PUT\", function () {\r\n    pm.expect(jsonData.name).to.eql(nombreActualizado);\r\n});\r\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://6aa4bd771397053d42bb04d8.mockapi.io/api/users/{{id_usuario}}",
+          "protocol": "https",
+          "host": [
+            "6aa4bd771397053d42bb04d8",
+            "mockapi",
+            "io"
+          ],
+          "path": [
+            "api",
+            "users",
+            "{{id_usuario}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "id_usuario",
+      "value": ""
+    },
+    {
+      "key": "nombre_enviado",
+      "value": ""
+    },
+    {
+      "key": "trabajo_enviado",
+      "value": ""
+    },
+    {
+      "key": "nombre_actualizado",
+      "value": ""
+    }
+  ]
+}
